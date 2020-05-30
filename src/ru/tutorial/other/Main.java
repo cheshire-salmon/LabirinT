@@ -61,13 +61,18 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
     static int frames1 = 0;
     static int frames2 = 0;
     static int frames3 = 0;
-   static int frames4 = 0;
-  static int frames5 = 0;
+    static int frames4 = 0;
+    static int frames5 = 0;
+     static int frames6 = 0;
+    static int frames7 = 0;
+    static int frames8 = 0;//
     static int kd = 0;
+    static int b_kd = 0;
     static int kd1 = 0;
     static int kd2 = 0;
     static int kd3 = 0;
-    static int kd4 = 0;
+    static int kd4 = 0;//
+    static int kd5 = 0;//
     static int p_hp=3;
     static int eres=0;
     static boolean p_hp_=true;
@@ -82,21 +87,24 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
     static boolean x4=true;
     static boolean x5=true;
     static boolean x6=true;
+    static boolean b1=true;
+    static boolean b2=true;
+    static boolean b3=true;
+    static boolean b4=true;
+    static boolean b5=true;
+    static boolean b6=true;
+    static boolean selected_up=true;
+    static boolean selected_down=false;
+    static boolean selected_right=false;
+    static boolean selected_left=false;
+    static boolean selected_sword=true;
+    static boolean selected_gun=false;
+    static boolean gun_shooted=false;
+    static boolean bullet=false;
+    static boolean bullet_from_gun=false;
+    static int bx=cellsX / 2;
+    static int by=cellsY / 2;
     /////////////////////////////////////
-   // static boolean z=true;
-   // static boolean z_hp_=true;
-   // static boolean z_hp_1=true;
-  //  static int z_hp=5;
-  //  static boolean z1=true;
-   // static int z_hp1=5;
-   // static int botX = cellsX / 2-20;//положение игрока на сетке
-    //static int botY = cellsY / 2;
-    //static int botTX = cellsX / 2;//положение зомби на сетке
-    //static int botTY = cellsY / 2;
-    //static int botX1 = cellsX / 2-10;//положение игрока на сетке
-    //static int botY1 = cellsY / 2+5;
-    //static int botTX1 = cellsX / 2;//положение зомби на сетке
-    //static int botTY1 = cellsY / 2;
    static int[] z_hp = new int[2];
    static boolean[] z=new boolean[2];
    static boolean[] z_hp_=new boolean[2];
@@ -106,6 +114,8 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
     static int[] targetY = new int[2];
     public static void draw(Graphics2D g) {
         if(eres==0){
+            bx=cellsX / 2;
+            by=cellsY / 2;
             lose= false;
             win= false;
             buttonActive1 = false;
@@ -127,6 +137,12 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
             x4=true;
             x5=true;
             x6=true;
+            b1=true;
+            b2=true;
+            b3=true;
+            b4=true;
+            b5=true;
+            b6=true;
             zombieX[1] = cellsX / 2+5;//положение игрока на сетке
             zombieY[1] = cellsY / 2-15;
             buttonActive = false;
@@ -184,20 +200,20 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
             win= false;
             g.setColor(Color.BLACK);
             g.setStroke(new BasicStroke(3));
-            g.drawRect(buttonX1 + buttonW1 / 5, buttonY1 + buttonH1 / 2-100,240,20);
+            g.drawRect(buttonX1 + buttonW1 / 5, buttonY1 + buttonH1 / 2-125,240,20);
             if(z[0]==true) {
                 frames++;
                 if (frames % 30 == 0) {
                     targetX[0] = playerX;
                     targetY[0] = playerY;
-                    moveBot();
+                    moveBot(0);
                     recalculatePaths(targetX[0],targetY[0]);
                 }
                 frames1++;
                 if (frames1 % 30 == 0) {
                     kd2++;
                     if (kd2 == 2) {
-                        turn_zombi_punch();
+                        turn_zombi_punch(0);
                         kd2 = 0;
                     }
                 }
@@ -207,14 +223,14 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                 if (frames4 % 30 == 0) {
                     targetX[1] = playerX;
                     targetY[1] = playerY;
-                    moveBot1();
-                    recalculatePaths1(targetX[1], targetY[1]);
+                    moveBot(1);
+                    recalculatePaths(targetX[1], targetY[1]);
                 }
                 frames5++;
                 if (frames5 % 30 == 0) {
                     kd3++;
                     if (kd3 == 2) {
-                        turn_zombi_punch1();
+                        turn_zombi_punch(1);
                         kd3 = 0;
                     }
                 }
@@ -259,28 +275,29 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
 
             if(x1==true){
                 g.setColor(new Color(0, 255, 0, 255));
-                g.fillRect(buttonX1 + buttonW1 / 5, buttonY1 + buttonH1 / 2-100,40,20);
+                g.fillRect(buttonX1 + buttonW1 / 5, buttonY1 + buttonH1 / 2-125,40,20);
             }
             if(x2==true){
                 g.setColor(new Color(0, 255, 0, 255));
-                g.fillRect(buttonX1 + buttonW1 / 5+40, buttonY1 + buttonH1 / 2-100,40,20);
+                g.fillRect(buttonX1 + buttonW1 / 5+40, buttonY1 + buttonH1 / 2-125,40,20);
             }
             if(x3==true){
                 g.setColor(new Color(0, 255, 0, 255));
-                g.fillRect(buttonX1 + buttonW1 / 5+80, buttonY1 + buttonH1 / 2-100,40,20);
+                g.fillRect(buttonX1 + buttonW1 / 5+80, buttonY1 + buttonH1 / 2-125,40,20);
             }
             if(x4==true){
                 g.setColor(new Color(0, 255, 0, 255));
-                g.fillRect(buttonX1 + buttonW1 / 5+120, buttonY1 + buttonH1 / 2-100,40,20);
+                g.fillRect(buttonX1 + buttonW1 / 5+120, buttonY1 + buttonH1 / 2-125,40,20);
             }
             if(x5==true){
                 g.setColor(new Color(0, 255, 0, 255));
-                g.fillRect(buttonX1 + buttonW1 / 5+160, buttonY1 + buttonH1 / 2-100,40,20);
+                g.fillRect(buttonX1 + buttonW1 / 5+160, buttonY1 + buttonH1 / 2-125,40,20);
             }
             if(x6==true){
                 g.setColor(new Color(0, 255, 0, 255));
-                g.fillRect(buttonX1 + buttonW1 / 5+200, buttonY1 + buttonH1 / 2-100,40,20);
+                g.fillRect(buttonX1 + buttonW1 / 5+200, buttonY1 + buttonH1 / 2-125,40,20);
             }
+
             if (p_hp_ == true) {
                 g.setColor(Color.BLACK);
                 g.setFont(new Font("", Font.BOLD, 12));
@@ -337,9 +354,7 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                      //  g.fillRect(x,y,20,20);
                    }
                 }
-
             }
-
                 //рисуем игрока поверх сетки
                 g.setColor(new Color(0, 0, 0, 0.3f));//полупрозрачный круг-тень под игроком
                 g.fillOval(gridX + cellSizeX * playerX, gridY + (cellSizeY) * playerY, cellSizeX, cellSizeY);
@@ -347,7 +362,6 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                 g.setColor(Color.RED);
                 // + cellSizeY смещение вниз, т.к. тест пишется из нижней левой точки, а клетка рисуется из верхней левой
                 g.drawString("@", gridX + cellSizeX * playerX, gridY + cellSizeY * playerY + cellSizeY * 3 / 4);
-
             //рисуем зомби поверх сетки
             if(z[0]==true) {
                 g.setColor(new Color(0, 0, 0, 0.3f));//полупрозрачный круг-тень под игроком
@@ -368,7 +382,6 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
         }
     }
 
-
     //функция делает один ход игрока в направлении dx dy
     public void turn(int dx, int dy) {
         if ( grid[playerX + dx][playerY + dy] !=LAVA ) {//Запрещаем ходить в воду и в лаву
@@ -376,214 +389,109 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
             playerY += dy;
         }
     }
-    public void turn_sword() {
-        if (z_hp[0]>=1) {
-           if(sword_punch == false) {
-               x1=false;
-               x2=false;
-               x3=false;
-               x4=false;
-               x5=false;
-               x6=false;
-                if (zombieX[0] == playerX && zombieY[0]  == playerY) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX - 1 && zombieY[0]  == playerY) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX && zombieY[0]  == playerY - 1) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX && zombieY[0]  == playerY + 1) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX + 1 && zombieY[0]  == playerY) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0]= false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX + 2 && zombieY[0]  == playerY) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (targetX[0] == playerX && targetY[0]  == playerY + 2) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX && zombieY[0]  == playerY - 2) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX - 2 && zombieY[0]  == playerY) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX + 1 && zombieY[0]  == playerY + 1) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX - 1 && zombieY[0]  == playerY + 1) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX + 1 && zombieY[0]  == playerY - 1) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                } else if (zombieX[0] == playerX - 1 && zombieY[0] == playerY - 1) {
-                    z_hp[0] --;
-                    p_hp_ = false;
-                    z_hp_[0] = false;
-                    p_hp_ = true;
-                    z_hp_[0] = true;
-                }
-              sword_punch =true;
-            }
-
-        }
-    }
-    public void turn_sword1() {
-        if (z_hp[1]>=1) {
-            if(sword_punch == false) {
-                x1=false;
-                x2=false;
-                x3=false;
-                x4=false;
-                x5=false;
-                x6=false;
-                if (zombieX[1] == playerX &&zombieY[1] == playerY) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX - 1 &&zombieY[1] == playerY) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX && zombieY[1] == playerY - 1) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX && zombieY[1] == playerY + 1) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX + 1 && zombieY[1] == playerY) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX + 2 && zombieY[1] == playerY) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX && zombieY[1] == playerY + 2) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX && zombieY[1] == playerY - 2) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX - 2 &&zombieY[1]== playerY) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX + 1 && zombieY[1] == playerY + 1) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX - 1 && zombieY[1] == playerY + 1) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                } else if (zombieX[1] == playerX + 1 && zombieY[1] == playerY - 1) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1]= true;
-                } else if (zombieX[1] == playerX - 1 && zombieY[1] == playerY - 1) {
-                    z_hp[1] --;
-                    p_hp_ = false;
-                    z_hp_[1] = false;
-                    p_hp_ = true;
-                    z_hp_[1] = true;
-                }
-                if(z[0]==false && z[1]==true) {
-              sword_punch = true;
+    public void turn_sword(int zombieIndex) {
+        if(selected_sword) {
+            if (z_hp[zombieIndex] >= 1) {
+                if (sword_punch == false) {
+                    x1 = false;
+                    x2 = false;
+                    x3 = false;
+                    x4 = false;
+                    x5 = false;
+                    x6 = false;
+                    if (zombieX[zombieIndex] == playerX && zombieY[zombieIndex] == playerY) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX - 1 && zombieY[zombieIndex] == playerY) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX && zombieY[zombieIndex] == playerY - 1) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX && zombieY[zombieIndex] == playerY + 1) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX + 1 && zombieY[zombieIndex] == playerY) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX + 2 && zombieY[zombieIndex] == playerY) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (targetX[zombieIndex] == playerX && targetY[zombieIndex] == playerY + 2) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX && zombieY[zombieIndex] == playerY - 2) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX - 2 && zombieY[zombieIndex] == playerY) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX + 1 && zombieY[zombieIndex] == playerY + 1) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX - 1 && zombieY[zombieIndex] == playerY + 1) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX + 1 && zombieY[zombieIndex] == playerY - 1) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    } else if (zombieX[zombieIndex] == playerX - 1 && zombieY[zombieIndex] == playerY - 1) {
+                        z_hp[zombieIndex]--;
+                        p_hp_ = false;
+                        z_hp_[zombieIndex] = false;
+                        p_hp_ = true;
+                        z_hp_[zombieIndex] = true;
+                    }
                 }
             }
-
         }
     }
 
-    public static void turn_zombi_punch() {
+
+    public static void turn_zombi_punch(int zombieIndex) {
         if (p_hp>=1) {
-            if (zombieX[0] == playerX && zombieY[0] == playerY) {
+            if (zombieX[zombieIndex] == playerX && zombieY[zombieIndex] == playerY) {
                 p_hp=p_hp-1;
                 p_hp_=false;
-                z_hp_[0]=false;
+                z_hp_[zombieIndex]=false;
                 p_hp_=true;
-                z_hp_[0]=true;
-            }
-        }
-    }
-    public static void turn_zombi_punch1() {
-        if (p_hp>=1) {
-            if (zombieX[1] == playerX && zombieY[1]== playerY) {
-                p_hp=p_hp-1;
-                p_hp_=false;
-                z_hp_[1]=false;
-                p_hp_=true;
-                z_hp_[1]=true;
+                z_hp_[zombieIndex]=true;
             }
         }
     }
@@ -605,12 +513,57 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                     turn(1, 0);
                     break;
             case KeyEvent.VK_SPACE:
-                    turn_sword1();
-                    turn_sword();
+                   // if(selected_gun) {
+                  //      b1=false;
+                  //      b2=false;
+                  //      b3=false;
+                   //     b4=false;
+                   //     b5=false;
+                   //     b6=false;
+                   //     bullet_from_gun = true;
+                  //  } else if(selected_sword){
+                        turn_sword(0);
+                        turn_sword(1);
+                sword_punch = true;
+                  //  }
                     break;
+           /* case KeyEvent.VK_UP:
+                selected_up=true;
+                selected_down=false;
+                selected_right=false;
+                selected_left=false;
+                break;
+            case KeyEvent.VK_DOWN:
+                selected_up=false;
+                selected_down=true;
+                selected_right=false;
+                selected_left=false;
+                break;
+            case KeyEvent.VK_RIGHT:
+                selected_up=false;
+                selected_down=false;
+                selected_right=true;
+                selected_left=false;
+                break;
+            case KeyEvent.VK_LEFT:
+                selected_up=false;
+                selected_down=false;
+                selected_right=false;
+                selected_left=true;
+                break;
+            case KeyEvent.VK_1:
+                selected_gun=false;
+                selected_sword =true;
+                break;
+            case KeyEvent.VK_2:
+                selected_gun=true;
+                selected_up=true;
+                selected_sword =false;
+                break;
+                */
             }
         }
-    public static void recalculatePaths(int tx, int ty) {
+    public static void recalculatePaths(int tx, int ty) {/////////лишние методы...
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
                 if (grid[i][j] >= 0) grid[i][j] = 0;
@@ -636,59 +589,17 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
             }
             cur++;
         } while (overwritten);
-
     }
-    public static void recalculatePaths1(int tx1, int ty1) {
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j] >= 0) grid[i][j] = 0;
-            }
-        }
-        grid[tx1][ty1] = 1;
-        int cur1 = 1;
-
-        boolean overwritten1 = false;
-        do {
-            overwritten1 = false;
-            for (int i = 0; i < grid.length; i++) {
-                for (int j = 0; j < grid[0].length; j++) {
-                    if (grid[i][j] != 0) continue;
-                    if ((i - 1 >= 0 && grid[i - 1][j] == cur1) ||
-                            (j - 1 >= 0 && grid[i][j - 1] == cur1) ||
-                            (i + 1 < cellsX && grid[i + 1][j] == cur1) ||
-                            (j + 1 < cellsY && grid[i][j + 1] == cur1)) {
-                        grid[i][j] = cur1 + 1;
-                        overwritten1 = true;
-                    }
-                }
-            }
-            cur1++;
-        } while (overwritten1);
-
-    }
-    public static void moveBot(){
-        if(grid[zombieX[0] ][zombieY[0] ] > 0){
-            if ((zombieX[0] - 1 >= 0 && grid[zombieX[0] - 1][zombieY[0] ] == grid[zombieX[0]][zombieY[0] ] -1) ){
-                zombieX[0] --;
-            } else if(zombieY[0]  - 1 >= 0 && grid[zombieX[0]][zombieY[0]  - 1]  == grid[zombieX[0]][zombieY[0] ] -1){
-                zombieY[0] --;
-            } else if((zombieX[0] + 1 < cellsX && grid[zombieX[0] + 1][zombieY[0] ]  == grid[zombieX[0]][zombieY[0] ] -1)) {
-                zombieX[0]++;
-            } else if     (zombieY[0]  + 1 < cellsY && grid[zombieX[0]][zombieY[0]  + 1]  == grid[zombieX[0]][zombieY[0] ] -1) {
-                zombieY[0] ++;
-            }
-        }
-    }
-    public static void moveBot1(){
-        if(grid[zombieX[1]][zombieY[1]] > 0){
-            if ((zombieX[1] - 1 >= 0 && grid[zombieX[1] - 1][zombieY[1]] == grid[zombieX[1]][zombieY[1]] -1) ){
-                zombieX[1]--;
-            } else if(zombieY[1] - 1 >= 0 && grid[zombieX[1]][zombieY[1] - 1]  == grid[zombieX[1]][zombieY[1]] -1){
-                zombieY[1]--;
-            } else if((zombieX[1] + 1 < cellsX && grid[zombieX[1] + 1][zombieY[1]]  == grid[zombieX[1]][zombieY[1]] -1)) {
-                zombieX[1]++;
-            } else if     (zombieY[1] + 1 < cellsY && grid[zombieX[1]][zombieY[1] + 1]  == grid[zombieX[1]][zombieY[1]] -1) {
-                zombieY[1]++;
+    public static void moveBot(int zombieIndex){/////////лишние методы...
+        if(grid[zombieX[zombieIndex] ][zombieY[zombieIndex] ] > 0){
+            if ((zombieX[zombieIndex] - 1 >= 0 && grid[zombieX[zombieIndex] - 1][zombieY[zombieIndex] ] == grid[zombieX[zombieIndex]][zombieY[zombieIndex] ] -1) ){
+                zombieX[zombieIndex] --;
+            } else if(zombieY[zombieIndex]  - 1 >= 0 && grid[zombieX[zombieIndex]][zombieY[zombieIndex]  - 1]  == grid[zombieX[zombieIndex]][zombieY[zombieIndex] ] -1){
+                zombieY[zombieIndex] --;
+            } else if((zombieX[zombieIndex] + 1 < cellsX && grid[zombieX[zombieIndex] + 1][zombieY[zombieIndex] ]  == grid[zombieX[zombieIndex]][zombieY[zombieIndex] ] -1)) {
+                zombieX[zombieIndex]++;
+            } else if     (zombieY[zombieIndex]  + 1 < cellsY && grid[zombieX[zombieIndex]][zombieY[zombieIndex]  + 1]  == grid[zombieX[zombieIndex]][zombieY[zombieIndex] ] -1) {
+                zombieY[zombieIndex] ++;
             }
         }
     }
@@ -756,7 +667,7 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println(e);
+        //System.out.println(e);
        if (e.getButton() == MouseEvent.BUTTON2) {//если мы нажали правую кнопку мыши
             try {
                 //Перемещаем курсор мыши в случайную часть экрана
@@ -787,8 +698,8 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                 egra=true;
                 buttonActive=true;
                 p_hp=3;
-                z_hp[0]=5;
-                z_hp[1]=5;
+                z_hp[0]=10;
+                z_hp[1]=10;
                 z[0]=true;
                 z[1]=true;
                 sword_punch=false;
@@ -802,37 +713,14 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                 x4=true;
                 x5=true;
                 x6=true;
+                b1=true;
+                b2=true;
+                b3=true;
+                b4=true;
+                b5=true;
+                b6=true;
                 zombieX[1] = cellsX / 2+5;//положение игрока на сетке
                 zombieY[1] = cellsY / 2-15;
-                /*
-                lose= false;
-                win= false;
-                buttonActive1 = false;
-                egra=true;
-                buttonActive=true;
-                p_hp=3;
-                z_hp[0]=5;
-                z_hp[1]=5;
-                z[0]=true;
-                z[1]=true;
-                sword_punch=false;
-                playerX = cellsX / 2;//положение игрока на сетке
-                playerY = cellsY / 2;
-                zombieX[0] = cellsX / 2-10;//положение игрока на сетке
-                zombieY[0] = cellsY / 2-10;
-                x1=true;
-                x2=true;
-                x3=true;
-                x4=true;
-                x5=true;
-                x6=true;
-                zombieX[1] = cellsX / 2+5;//положение игрока на сетке
-                zombieY[1] = cellsY / 2-15;
-                 buttonActive = false;
-                buttonActive1 = true;
-                egra=false;
-                sword_punch=false;
-                 */
             }
         }
         //если нажали на колесико, сделать кнопку активной
@@ -864,7 +752,6 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
     public void mouseExited(MouseEvent e) {}
     @Override
     public void mousePressed(MouseEvent e) {
-
     }
     @Override
     public void mouseReleased(MouseEvent e) {
