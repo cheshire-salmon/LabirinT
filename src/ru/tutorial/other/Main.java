@@ -189,7 +189,7 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
             g.setStroke(new BasicStroke(3));
             g.drawRect(buttonX1 + buttonW1 / 5, buttonY1 + buttonH1 / 2-125,240,20);
             frames6++;
-            if(frames6 % 1800 ==0){
+            if(frames6 % 1200 ==0){
                 COUNT_ZOMBIE++;
                 for (int i = 0; i < COUNT_ZOMBIE; i++) {
                     if(i==COUNT_ZOMBIE-1) {
