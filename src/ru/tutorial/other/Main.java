@@ -57,7 +57,7 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
 
     //_________________________________________//
 
-    static int frames = 0;
+    static int[] frames =new int[100];
     static int frames1 = 0;
     static int frames2 = 0;
     static int frames3 = 0;
@@ -105,32 +105,31 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
     static int bx=cellsX / 2;
     static int by=cellsY / 2;
     /////////////////////////////////////
-   static int[] z_hp = new int[2];
-   static boolean[] z=new boolean[2];
-   static boolean[] z_hp_=new boolean[2];
-    static int[] zombieX = new int[2];
-    static int[] zombieY = new int[2];
-    static int[] targetX = new int[2];
-    static int[] targetY = new int[2];
+   static int[] z_hp = new int[1000000];
+   static boolean[] z=new boolean[1000000];
+   static boolean[] z_hp_=new boolean[1000000];
+    static int[] zombieX = new int[1000000];
+    static int[] zombieY = new int[1000000];
+    static int[] targetX = new int[1000000];
+    static int[] targetY = new int[1000000];
+    static int COUNT_ZOMBIE=1;
     public static void draw(Graphics2D g) {
         if(eres==0){
             bx=cellsX / 2;
-            by=cellsY / 2;
+            by=cellsY / 2;//  for (int i = 0; i < COUNT_ZOMBIE; i++) {}
             lose= false;
             win= false;
             buttonActive1 = false;
             egra=true;
             buttonActive=true;
             p_hp=3;
-            z_hp[0]=5;
-            z_hp[1]=5;
-            z[0]=true;
-            z[1]=true;
+            for (int i = 0; i < COUNT_ZOMBIE; i++) {
+                z_hp[i] = 3;
+                z[i] = true;
+            }
             sword_punch=false;
             playerX = cellsX / 2;//положение игрока на сетке
             playerY = cellsY / 2;
-            zombieX[0] = cellsX / 2-10;//положение игрока на сетке
-            zombieY[0] = cellsY / 2-10;
             x1=true;
             x2=true;
             x3=true;
@@ -143,8 +142,6 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
             b4=true;
             b5=true;
             b6=true;
-            zombieX[1] = cellsX / 2+5;//положение игрока на сетке
-            zombieY[1] = cellsY / 2-15;
             buttonActive = false;
             buttonActive1 = true;
             egra=false;
@@ -163,16 +160,10 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
             g.setFont(new Font("", Font.BOLD, buttonH1 / 4));
             g.drawString("PLAY", buttonX1 + buttonW1 / 5, buttonY1 + buttonH1 / 2);
         }
-        if(z_hp[0]==0){
-            z[0]=false;
-        }
-        if(z_hp[1]==0){
-            z[1]=false;
-        }
-        if(z_hp[0]==0 && z_hp[1]==0  ){
-            lose= false;
-            win= true;
-            egra=false;
+        for (int i = 0; i < COUNT_ZOMBIE; i++) {
+            if(z_hp[i]==0){
+                z[i]=false;
+            }
         }
         if(p_hp==0){
             lose= true;
@@ -192,49 +183,38 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
             buttonActive1 = true;
         }
         if (egra) {
-            z_hp_[1] = false;
-            z_hp_[0] = false;
-            z_hp_[1] = true;
-            z_hp_[0] = true;
             lose= false;
             win= false;
             g.setColor(Color.BLACK);
             g.setStroke(new BasicStroke(3));
             g.drawRect(buttonX1 + buttonW1 / 5, buttonY1 + buttonH1 / 2-125,240,20);
-            if(z[0]==true) {
-                frames++;
-                if (frames % 30 == 0) {
-                    targetX[0] = playerX;
-                    targetY[0] = playerY;
-                    moveBot(0);
-                    recalculatePaths(targetX[0],targetY[0]);
-                }
-                frames1++;
-                if (frames1 % 30 == 0) {
-                    kd2++;
-                    if (kd2 == 2) {
-                        turn_zombi_punch(0);
-                        kd2 = 0;
+            frames6++;
+            if(frames6 % 1800 ==0){
+                COUNT_ZOMBIE++;
+                for (int i = 0; i < COUNT_ZOMBIE; i++) {
+                    if(i==COUNT_ZOMBIE-1) {
+                        z_hp[i] = 3;
+                        z[i] = true;
+                        zombieX[i] = cellsX / 2-10;
+                        zombieY[i] = cellsY / 2-10;
                     }
                 }
             }
-            if(z[1]==true) {
-                frames4++;
-                if (frames4 % 30 == 0) {
-                    targetX[1] = playerX;
-                    targetY[1] = playerY;
-                    moveBot(1);
-                    recalculatePaths(targetX[1], targetY[1]);
-                }
-                frames5++;
-                if (frames5 % 30 == 0) {
-                    kd3++;
-                    if (kd3 == 2) {
-                        turn_zombi_punch(1);
-                        kd3 = 0;
+
+            //  for (int i = 0; i < COUNT_ZOMBIE; i++) {}
+            for (int i = 0; i < COUNT_ZOMBIE; i++) {
+                if(z[i]==true) {
+                    frames[i]++;
+                    if (frames[i] % 30 == 0) {
+                        targetX[i] = playerX;
+                        targetY[i] = playerY;
+                        moveBot(i);
+                        recalculatePaths(targetX[i],targetY[i]);
+                        turn_zombi_punch(i);
                     }
                 }
             }
+            //  for (int i = 0; i < COUNT_ZOMBIE; i++) {}
                 frames3++;
                 if (frames3 % 60 == 0) {
                     kd1++;
@@ -245,6 +225,7 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                         kd1 = 0;
                     }
                 }
+            //  for (int i = 0; i < COUNT_ZOMBIE; i++) {}
                 if (sword_punch == true) {
                     frames2++;
                     if (frames2 % 60 == 0) {
@@ -272,7 +253,7 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                         }
                     }
                 }
-
+//  for (int i = 0; i < COUNT_ZOMBIE; i++) {}
             if(x1==true){
                 g.setColor(new Color(0, 255, 0, 255));
                 g.fillRect(buttonX1 + buttonW1 / 5, buttonY1 + buttonH1 / 2-125,40,20);
@@ -303,18 +284,6 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                 g.setFont(new Font("", Font.BOLD, 12));
                 g.drawString(" Your HP:" + p_hp, 0, 100);
             }
-            if (z_hp_[0] == true) {
-                g.setColor(Color.BLACK);
-                g.setFont(new Font("", Font.BOLD, 12));
-                g.drawString(" Zombi's HP:" + z_hp[0], 0, 200);
-            }
-            if (z_hp_[1] == true) {
-                g.setColor(Color.BLACK);
-                g.setFont(new Font("", Font.BOLD, 12));
-                g.drawString("1Zombi's HP:" + z_hp[1], 0, 300);
-            }
-
-
             if (buttonActive) {
                 g.setColor(new Color(255, 255, 0, 255));
                 g.fillRect(buttonX, buttonY, buttonW, buttonH);
@@ -363,21 +332,15 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                 // + cellSizeY смещение вниз, т.к. тест пишется из нижней левой точки, а клетка рисуется из верхней левой
                 g.drawString("@", gridX + cellSizeX * playerX, gridY + cellSizeY * playerY + cellSizeY * 3 / 4);
             //рисуем зомби поверх сетки
-            if(z[0]==true) {
-                g.setColor(new Color(0, 0, 0, 0.3f));//полупрозрачный круг-тень под игроком
-                g.fillOval(gridX + cellSizeX * zombieX[0], gridY + (cellSizeY) * zombieY[0], cellSizeX, cellSizeY);
-                g.setFont(new Font("", Font.BOLD, cellSizeY));
-                g.setColor(Color.CYAN);
-                // + cellSizeY смещение вниз, т.к. тест пишется из нижней левой точки, а клетка рисуется из верхней левой
-                g.drawString("@", gridX + cellSizeX * zombieX[0], gridY + cellSizeY * zombieY[0] + cellSizeY * 3 / 4);
-            }
-            if(z[1]==true) {
-                g.setColor(new Color(0, 0, 0, 0.3f));//полупрозрачный круг-тень под игроком
-                g.fillOval(gridX + cellSizeX * zombieX[1], gridY + (cellSizeY) * zombieY[1], cellSizeX, cellSizeY);
-                g.setFont(new Font("", Font.BOLD, cellSizeY));
-                g.setColor(Color.GREEN);
-                // + cellSizeY смещение вниз, т.к. тест пишется из нижней левой точки, а клетка рисуется из верхней левой
-                g.drawString("@", gridX + cellSizeX * zombieX[1], gridY + cellSizeY * zombieY[1] + cellSizeY * 3 / 4);
+            for (int i = 0; i < COUNT_ZOMBIE; i++) {
+                if(z[i]==true) {
+                    g.setColor(new Color(0, 0, 0, 0.3f));//полупрозрачный круг-тень под игроком
+                    g.fillOval(gridX + cellSizeX * zombieX[i], gridY + (cellSizeY) * zombieY[i], cellSizeX, cellSizeY);
+                    g.setFont(new Font("", Font.BOLD, cellSizeY));
+                    g.setColor(Color.CYAN);
+                    // + cellSizeY смещение вниз, т.к. тест пишется из нижней левой точки, а клетка рисуется из верхней левой
+                    g.drawString("@", gridX + cellSizeX * zombieX[i], gridY + cellSizeY * zombieY[i] + cellSizeY * 3 / 4);
+                }
             }
         }
     }
@@ -513,21 +476,12 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                     turn(1, 0);
                     break;
             case KeyEvent.VK_SPACE:
-                   // if(selected_gun) {
-                  //      b1=false;
-                  //      b2=false;
-                  //      b3=false;
-                   //     b4=false;
-                   //     b5=false;
-                   //     b6=false;
-                   //     bullet_from_gun = true;
-                  //  } else if(selected_sword){
-                        turn_sword(0);
-                        turn_sword(1);
+                for (int i = 0; i < COUNT_ZOMBIE; i++) {
+                    turn_sword(i);
+                }
                 sword_punch = true;
-                  //  }
                     break;
-           /* case KeyEvent.VK_UP:
+            case KeyEvent.VK_UP:
                 selected_up=true;
                 selected_down=false;
                 selected_right=false;
@@ -552,15 +506,14 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                 selected_left=true;
                 break;
             case KeyEvent.VK_1:
-                selected_gun=false;
-                selected_sword =true;
+               // selected_gun=false;
+               // selected_sword =true;
                 break;
             case KeyEvent.VK_2:
-                selected_gun=true;
-                selected_up=true;
-                selected_sword =false;
+              //  selected_gun=true;
+              //  selected_sword =false;
                 break;
-                */
+
             }
         }
     public static void recalculatePaths(int tx, int ty) {/////////лишние методы...
@@ -692,35 +645,28 @@ public class Main extends JFrame implements KeyListener, MouseInputListener {
                     e.getX() >= buttonX1 && e.getX() <= buttonX1 + buttonW1 &&
                     e.getY() >= buttonY1 && e.getY() <= buttonY1 + buttonH1
             ) {
+                COUNT_ZOMBIE=1;
                 lose= false;
                 win= false;
                 buttonActive1 = false;
                 egra=true;
                 buttonActive=true;
                 p_hp=3;
-                z_hp[0]=10;
-                z_hp[1]=10;
-                z[0]=true;
-                z[1]=true;
+                for (int i = 0; i < COUNT_ZOMBIE; i++) {
+                    z_hp[i]=3;
+                    z[i]=true;
+                    zombieX[i] = cellsX / 2-10;//положение игрока на сетке
+                    zombieY[i] = cellsY / 2-10;
+                }
                 sword_punch=false;
                 playerX = cellsX / 2;//положение игрока на сетке
                 playerY = cellsY / 2;
-                zombieX[0] = cellsX / 2-10;//положение игрока на сетке
-                zombieY[0] = cellsY / 2-10;
                 x1=true;
                 x2=true;
                 x3=true;
                 x4=true;
                 x5=true;
                 x6=true;
-                b1=true;
-                b2=true;
-                b3=true;
-                b4=true;
-                b5=true;
-                b6=true;
-                zombieX[1] = cellsX / 2+5;//положение игрока на сетке
-                zombieY[1] = cellsY / 2-15;
             }
         }
         //если нажали на колесико, сделать кнопку активной
